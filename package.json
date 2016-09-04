@@ -1,0 +1,33 @@
+{
+  "name": "algolia-search-idd",
+  "version": "0.0.0",
+  "description": "Input DropDown for Algolia",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/csbun/algolia-search-idd.git"
+  },
+  "keywords": [
+    "algolia",
+    "search",
+    "input",
+    "drop",
+    "down",
+    "template"
+  ],
+  "author": "Hans Chan <icsbun@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/csbun/algolia-search-idd/issues"
+  },
+  "homepage": "https://github.com/csbun/algolia-search-idd#readme",
+  "devDependencies": {
+    "rollup-plugin-html": "^0.2.1"
+  },
+  "dependencies": {
+    "silly-ejs": "^0.1.1"
+  }
+}
