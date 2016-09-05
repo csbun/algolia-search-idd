@@ -1,3 +1,5 @@
+// import DEFAULT_TPL from './tpl.html';
+// import ejs from 'silly-ejs';
 const ejs = require('silly-ejs');
 const DEFAULT_TPL = require('./tpl.html');
 
@@ -28,10 +30,17 @@ function showDropdown($el) {
 module.exports = function (selector, template) {
   $(selector).on('keyup', function(e) {
     const $el = $(e.currentTarget);
-    algoliaSearchIndex.search($el.val(), function (err, content) {
-      // console.log(err, content);
-      console.log(content.hits.map(hit => hit.title));
-    });
+    const val = $el.val();
+    if (val.length > 0) {
+      algoliaSearchIndex.search($el.val(), function (err, content) {
+        // console.log(err, content);
+        // console.log(content.hits.map(hit => hit.title));
+        templateDropdown(content, template);
+        showDropdown($el);
+      });
+    } else {
+      $dropdown.hide();
+    }
   });
-  $(document.body).append($dropdown);
+  $(document.body).append($dropdown.hide());
 };
