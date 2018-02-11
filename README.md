@@ -1,7 +1,7 @@
 # algolia-search-idd
 Input DropDown for Algolia
 
-![](https://github.com/csbun/algolia-search-idd/blob/master/screenshot/screenshot.png?raw=true)
+<img width="200" src="https://github.com/csbun/algolia-search-idd/blob/master/screenshot/screenshot.png?raw=true">
 
 ## Install
 
