@@ -1,0 +1,68 @@
+.algolia-search-input-dropdown {
+  position: absolute;
+  z-index: 9999;
+  background: #ffffff;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  margin-top: 3px;
+  overflow: hidden;
+  font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    li {
+      list-style: none;
+      margin: 0 8px;
+      padding: 4px 8px;
+      border-bottom: 1px solid #ddd;
+      overflow: hidden;
+      &:last-child {
+        border-bottom: none;
+      }
+      a {
+        text-decoration: none;
+        color: #0094e0;
+        font-size: 18px;
+        line-height: 1.4em; 
+        height: 1.4em;
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      @lintHeight: 1.4;
+      @fontSize: 14px;
+      @lineToShow: 3; // 最多3行
+      p {
+        color: #555;
+        margin: 0;
+        padding: 3px 0;
+        display: block; /* Fallback for non-webkit */
+        display: -webkit-box;
+        max-height: @fontSize*@lintHeight*@lineToShow; /* Fallback for non-webkit */
+        margin: 0 auto;
+        font-size: @fontSize;
+        line-height: @lintHeight;
+        -webkit-line-clamp: @lineToShow;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+
+  .logo {
+    margin: 0;
+    padding: 0 14px;
+    text-align: right;
+    span {
+      display: inline-block;
+      width: 100px;
+      height: 15px;
+      background: url(https://www.algolia.com/static_assets/images/press/downloads/search-by-algolia.svg);
+      background-size: 100% 100%;
+    }
+  }
+}

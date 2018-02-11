@@ -1,46 +1,107 @@
-// import DEFAULT_TPL from './tpl.html';
-// import ejs from 'silly-ejs';
-const ejs = require('silly-ejs');
-const DEFAULT_TPL = require('./tpl.html');
+import ejs from 'silly-ejs';
+import algoliasearch from 'algoliasearch/dist/algoliasearchLite';
+import documentReady from './documentReady';
+import './style.less';
+import DEFAULT_TPL from './tpl.html';
 
-const $dropdown = $('<div>').css({
-  position: 'absolute',
-  zIndex: 999,
-});
+const EVENT_TOUCHSTART = 'ontouchstart';
+const EVENT_CLICK = 'click';
+const CLASS_NAME = 'algolia-search-input-dropdown';
+
+const $dropdown = document.createElement('div');
+$dropdown.className = CLASS_NAME;
 
 function templateDropdown(data, template) {
-  $dropdown.html(ejs(template || DEFAULT_TPL, data));
+  $dropdown.innerHTML = ejs(template || DEFAULT_TPL, data);
 }
 
 function showDropdown($el) {
+  const width = $el.offsetWidth;
   let top = $el.offsetHeight;
-  let right = $el.offsetRight;
+  let left = 0;
   let $parent = $el;
   while ($parent && $parent.tagName !== 'BODY') {
-    top += $parent.offsetTop;
-    right += $parent.offsetLeft;
+    top += $parent.offsetTop || 0;
+    left += $parent.offsetLeft || 0;
     $parent = $parent.offsetParent;
   }
-  $dropdown.css({
-    top,
-    right,
-  }).show();
+  $dropdown.style.top = `${top}px`;
+  $dropdown.style.left = `${left}px`;
+  $dropdown.style.width = `${width}px`;
+  $dropdown.style.display = 'block';
 }
 
-module.exports = function (selector, template) {
-  $(selector).on('keyup', function(e) {
-    const $el = $(e.currentTarget);
-    const val = $el.val();
-    if (val.length > 0) {
-      algoliaSearchIndex.search($el.val(), function (err, content) {
-        // console.log(err, content);
-        // console.log(content.hits.map(hit => hit.title));
-        templateDropdown(content, template);
-        showDropdown($el);
-      });
-    } else {
-      $dropdown.hide();
+function hideDropDown() {
+  $dropdown.style.display = 'none';
+}
+
+function onClickDocumentBodyHideDD(e) {
+  let $el = e.target;
+  while ($el && $el.tagName !== 'BODY') {
+    if ($el.classList.contains(CLASS_NAME)) {
+      return;
     }
-  });
-  $(document.body).append($dropdown.hide());
-};
+    $el = $el.offsetParent;
+  }
+  hideDropDown();
+}
+
+// append to body;
+documentReady(() => {
+  hideDropDown();
+  document.body.appendChild($dropdown);
+  document.body.addEventListener(
+    EVENT_TOUCHSTART in document.body ? EVENT_TOUCHSTART : EVENT_CLICK,
+    onClickDocumentBodyHideDD,
+  );
+});
+
+function initElementWithAlgoliaSearch(algoliaSearchIndex, $el, template) {
+  if ($el instanceof Element && $el.tagName === 'INPUT') {
+    $el.addEventListener('keyup', () => {
+      const val = $el.value;
+      if (val.length > 0) {
+        algoliaSearchIndex.search(val, (err, content) => {
+          if (err) {
+            /* eslint no-console: 0 */
+            console.error(err);
+          } else {
+            // console.log(content.hits.map(hit => hit.title));
+            templateDropdown(content, template);
+            showDropdown($el);
+          }
+        });
+      } else {
+        hideDropDown();
+      }
+    });
+  }
+}
+
+// export function
+export default function ({
+  el,
+  template,
+  applicationID,
+  apiKey,
+  indexName,
+}) {
+  let $els = [];
+  if (el instanceof Element) {
+    $els = [el];
+  } else if (el instanceof NodeList) {
+    $els = el;
+  } else if (typeof el === 'string' && el) {
+    $els = document.querySelectorAll(el);
+  } else {
+    throw new Error('options.el is required and should be Element, NodeList or query selector String');
+  }
+
+  const algoliaSearchClient = algoliasearch(applicationID, apiKey);
+  const algoliaSearchIndex = algoliaSearchClient.initIndex(indexName);
+
+  /* eslint no-plusplus: 0 */
+  for (let i = 0; i < $els.length; i++) {
+    initElementWithAlgoliaSearch(algoliaSearchIndex, $els[i], template);
+  }
+}

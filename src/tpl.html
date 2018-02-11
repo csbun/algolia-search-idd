@@ -1,5 +1,15 @@
-<ul>
-<% for (var i = 0; i < hits.length; i++) { var hit = hits[i]; %>
-  <li><%= hit.title %></li>
-<% } %>
-</ul>
+<div class="algolia-search-idd">
+  <% if (hits && hits.length) { %>
+    <ul>
+    <% var max = Math.min(hits.length, 5); for (var i = 0; i < max; i++) { var hit = hits[i]; %>
+      <li>
+        <a href="<%= hit.permalink %>" target="_blank"><%= hit.title %></a>
+        <p><%= hit.excerpt.replace(/<(?:!|\/?[a-‌​zA-Z]+).*?\/?>/g, '') %></p>
+      </li>
+    <% } %>
+    </ul>
+  <% } else { %>
+    <p style="text-align: center">No results 😣</p>
+  <% } %>
+  <p class="logo"><span></span></p>
+</div>
