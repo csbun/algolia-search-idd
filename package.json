@@ -1,6 +1,6 @@
 {
   "name": "algolia-search-idd",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Input DropDown for Algolia",
   "main": "dest/index.min.js",
   "scripts": {
